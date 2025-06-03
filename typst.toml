@@ -1,0 +1,12 @@
+[package]
+name = "comet"
+version = "0.1.0"
+entrypoint = "src/comet.typ"
+authors = ["Mc-Zen <https://github.com/Mc-Zen>"]
+license = "MIT"
+description = "Faster."
+compiler = "0.11.0"
+
+repository = "https://github.com/lilaq-project/comet"
+keywords = ["algorithm"]
+categories = ["scripting", "utility"]
