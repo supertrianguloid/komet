@@ -12,7 +12,7 @@
 
 ) = {
   if type(bins) == array {
-    bins = bins.map(float)
+    bins = bins.map(float).sorted()
   }
   let input = cbor.encode((
     data.map(float),
