@@ -239,10 +239,10 @@ fn single_contour(x: &[f64], y: &[f64], z: &[f64], level: f64, z_range: f64) -> 
     group_segments(segments)
 }
 
-/// Generates an contour from intersecting a function on a 2d rectangular mesh
+/// Generates contours from intersecting a function on a 2d rectangular mesh
 /// with a planes parallel to the z-plane at `z=level`.
 ///
-/// The z values are to arranged in a flat array as the following
+/// The z values should be arranged in a flat array as the following
 /// ```
 /// (
 ///   z(x0, y0), z(x1, y0), ...,
