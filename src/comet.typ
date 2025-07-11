@@ -81,6 +81,42 @@
 ) = fft-impl(data, direction: "inverse")
 
 
+#let contour(
+  x, 
+  y, 
+  z, 
+  levels
+) = {
+  
+  
+  if type(z) == function {
+    z = y.map(y => x.map(x => z(x, y)))
+  }
+
+  if type(levels) in (int, float) {
+    levels = (levels,)
+  }
+
+  let data = cbor.encode((
+    x.map(float),
+    y.map(float),
+    z.flatten().map(float),
+    levels.map(float)
+  ))
+  cbor(p.contour(data))
+}
+
+#contour((0, 1), (0, 1), ((-1,1,1,-1)), (0,))
+
+// #let o = contour(
+//     lq.linspace(-2, 2, num: 1000),
+//     lq.linspace(-2, 2, num: 1000),
+//     (x, y) => x * y,
+//     (-2, -1.5, -1, -.5, 0, .5, 1, 1.5, 2)
+//   )
+// )
+// #o
+a a
 
 #{
   let t = range(30)
