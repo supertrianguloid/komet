@@ -11,7 +11,7 @@ comet-algorithms = { version = "0.1.0", path = "../comet-algorithms" }
 ciborium = "0.2.2"
 ciborium-io = "0.2.2"
 ciborium-ll = "0.2.2"
-wasm-minimal-protocol = { path = "../../wasm-minimal-protocol" }
+wasm-minimal-protocol = { path = "../../libs/wasm-minimal-protocol" }
 rustfft = { version = "5.1.1" }
 
 
@@ -22,4 +22,3 @@ opt-level = 'z'     # Optimize for size
 codegen-units = 1   # Reduce number of codegen units to increase optimizations
 panic = 'abort'     # Abort on panic
 
-[workspace] # so that it i  s not included in the upper workspace

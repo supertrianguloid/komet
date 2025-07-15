@@ -1,7 +1,9 @@
 pub fn histogram(data: &[f64], edges: &[f64]) -> Vec<u64> {
     let mut counts = vec![0u64; edges.len() - 1];
     for &elem in data {
-        if elem < edges[0] { continue; }
+        if elem < edges[0] {
+            continue;
+        }
 
         for (i, &edge) in edges[1..].iter().enumerate() {
             if elem < edge || (elem == edge && i == data.len() - 2) {
@@ -13,8 +15,6 @@ pub fn histogram(data: &[f64], edges: &[f64]) -> Vec<u64> {
 
     counts
 }
-
-
 
 #[cfg(test)]
 mod tests {

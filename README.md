@@ -17,18 +17,29 @@ Currently, the following functions are available:
 
 Contributions are welcome as long as they keep the binary size low (which also means they ideally add no crates as dependencies). 
 
+## Repository structure
+
+This repository contains two Rust crates
+- `comet-algorithms`: A library that contains the source code for the actual algorithms (e.g., `contour`). 
+- `comet`: Compiles to a WASM plugin for Typst. 
+and a Typst package `comet`. 
+
+
+## Documentation
+
 
 ---
 ### Histogram
 ```typ
 #comet.histogram(
-    data: array,
+    values: array,
     bins: int | array
 )
 ```
 Computes a histogram of the given array. Elements need to be of type `int` or `float`. Through the parameter `bins` you can either specify 
-- the number of bins (evenly spaced over the data range) 
-- or an array of bin edges: if n+1 bin edges are given, the data will be sorted into n bins where the lower edge is always included in the bin and the upper edge is always excluded except for the last bin. 
+- the number of bins (evenly spaced over the value range) 
+- or an array of bin edges: if n+1 bin edges are given, the values will be sorted into n bins where the lower edge is always included in the bin and the upper edge is always excluded except for the last bin. 
+
 
 ---
 ### Boxplot
@@ -54,7 +65,7 @@ All of these values are returned together in form of a dictionary.
 ### FFT
 ```typ
 #comet.fft(
-    data: array
+    values: array
 )
 ```
 Computes the Fourier transform of an array of real (`float`) or complex (real/imaginary pairs of `float`) values through the FFT algorithm. Returns an array of complex (i.e., real/imaginary `float` pairs) numbers. 
@@ -63,7 +74,7 @@ Computes the Fourier transform of an array of real (`float`) or complex (real/im
 ### IFFT
 ```typ
 #comet.ifft(
-    data: array
+    values: array
 )
 ```
 Computes the inverse Fourier transform of an array of real (`float`) or complex (real/imaginary pairs of `float`) values. Returns an array of complex (i.e., real/imaginary `float` pairs) numbers. 

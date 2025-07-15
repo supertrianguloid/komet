@@ -243,7 +243,7 @@ fn single_contour(x: &[f64], y: &[f64], z: &[f64], level: f64, z_range: f64) -> 
 /// with a planes parallel to the z-plane at `z=level`.
 ///
 /// The z values should be arranged in a flat array as the following
-/// ```
+/// ```rs
 /// (
 ///   z(x0, y0), z(x1, y0), ...,
 ///   z(x0, y1), z(x1, y1), ...,
