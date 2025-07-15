@@ -1,4 +1,5 @@
-# Comet
+![comet](https://github.com/user-attachments/assets/fb835102-9e98-47d0-8e89-ef7da156c5b7)
+---
 
 _High-performance computations for Typst_
 
