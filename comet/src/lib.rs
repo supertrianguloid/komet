@@ -121,6 +121,106 @@ pub fn histogram(input: &[u8]) -> Result<Vec<u8>, String> {
     };
 }
 
+#[wasm_func]
+pub fn boxplot(input: &[u8]) -> Result<Vec<u8>, String> {
+    let mut decoder = Decoder::from(&input[..]);
+
+    match decoder.pull().unwrap() {
+        Header::Array(Some(len)) => {
+            if len != 2 {
+                return Err(String::from("Expected array of 2 elements, got more"));
+            }
+
+            let data = match decoder.pull().unwrap() {
+                Header::Array(Some(len)) => read::read_float_array(&mut decoder, len),
+                _ => return Err(String::from("Bad input")),
+            };
+
+            let whisker_pos = match decoder.pull().unwrap() {
+                Header::Float(whisker_pos) => whisker_pos,
+                _ => return Err(String::from("Bad input")),
+            };
+
+            let boxplot_stats = comet_algorithms::boxplot(&data, whisker_pos);
+
+            let mut output = Vec::<u8>::new();
+            let mut encoder = Encoder::from(&mut output);
+            // Write the structure
+            encoder.push(Header::Map(Some(9))).unwrap();
+
+            encoder.text("mean", None).unwrap();
+            encoder.push(Header::Float(boxplot_stats.mean)).unwrap();
+
+            encoder.text("median", None).unwrap();
+            encoder.push(Header::Float(boxplot_stats.median)).unwrap();
+
+            encoder.text("q1", None).unwrap();
+            encoder.push(Header::Float(boxplot_stats.q1)).unwrap();
+
+            encoder.text("q3", None).unwrap();
+            encoder.push(Header::Float(boxplot_stats.q3)).unwrap();
+
+            encoder.text("min", None).unwrap();
+            encoder.push(Header::Float(boxplot_stats.min)).unwrap();
+
+            encoder.text("max", None).unwrap();
+            encoder.push(Header::Float(boxplot_stats.max)).unwrap();
+
+            encoder.text("whisker-low", None).unwrap();
+            encoder
+                .push(Header::Float(boxplot_stats.whisker_low))
+                .unwrap();
+
+            encoder.text("whisker-high", None).unwrap();
+            encoder
+                .push(Header::Float(boxplot_stats.whisker_high))
+                .unwrap();
+
+            encoder.text("outliers", None).unwrap();
+            encoder
+                .push(Header::Array(Some(boxplot_stats.outliers.len())))
+                .unwrap();
+            for outlier in boxplot_stats.outliers {
+                encoder.push(Header::Float(outlier)).unwrap();
+            }
+
+            encoder.flush().unwrap();
+            return Ok(output);
+        }
+        _ => return Err(String::from("Expected an array of inputs")),
+    };
+}
+
+#[wasm_func]
+pub fn boxplot_alt(input: &[u8]) -> Result<Vec<u8>, String> {
+    let values: Vec<f64> = input
+        .chunks_exact(8)
+        .map(|bytes| f64::from_be_bytes(bytes.try_into().expect("msg")))
+        .collect();
+
+    let whisker_pos = values[0];
+
+    let boxplot_stats = comet_algorithms::boxplot(&values[1..], whisker_pos);
+
+    let mut output_values: Vec<f64> = vec![
+        boxplot_stats.mean,
+        boxplot_stats.median,
+        boxplot_stats.min,
+        boxplot_stats.max,
+        boxplot_stats.q1,
+        boxplot_stats.q3,
+        boxplot_stats.whisker_low,
+        boxplot_stats.whisker_high,
+    ];
+    output_values.extend(boxplot_stats.outliers);
+    let p: Vec<[u8; 8]> = output_values
+        .iter()
+        .map(|value| f64::to_be_bytes(*value))
+        .collect();
+    
+    return Ok(p[..].concat());
+}
+
 fn fft_impl(input: &[u8], direction: FftDirection) -> Result<Vec<u8>, String> {
     let mut decoder = Decoder::from(&input[..]);
 
