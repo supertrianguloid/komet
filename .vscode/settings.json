@@ -1,6 +1,0 @@
-{
-    "rust-analyzer.linkedProjects": [
-        "./comet/Cargo.toml",
-        "./comet-algorithms/Cargo.toml",
-    ]
-}

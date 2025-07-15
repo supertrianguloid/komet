@@ -10,8 +10,16 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  test:
+    runs-on: ubuntu-latest
 
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Run tests
+      run: cargo test --package comet-algorithms
+      
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,9 +27,6 @@ jobs:
 
     - name: Install WASM target
       run: rustup target add wasm32-unknown-unknown
-      
-    - name: Run tests
-      run: cargo test --package comet-algorithms
       
     - name: Build WASM plugin
       run: cargo build --release --target wasm32-unknown-unknown
