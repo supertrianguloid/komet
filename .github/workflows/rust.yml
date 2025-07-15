@@ -16,6 +16,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Install WASM target
+      run: rustup target add wasm32-unknown-unknown
+      
     - name: Run tests
       run: cargo test --package comet-algorithms
       
