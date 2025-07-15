@@ -217,7 +217,7 @@ pub fn boxplot_alt(input: &[u8]) -> Result<Vec<u8>, String> {
         .iter()
         .map(|value| f64::to_be_bytes(*value))
         .collect();
-    
+
     return Ok(p[..].concat());
 }
 

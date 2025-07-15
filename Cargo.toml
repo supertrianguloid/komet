@@ -1,0 +1,14 @@
+[workspace]
+members = [
+    "crates/comet",
+    "crates/comet-algorithms"
+]
+resolver = "2"
+
+
+[profile.release]
+lto = true          # Enable link-time optimization
+strip = true        # Strip symbols from binary*
+opt-level = 'z'     # Optimize for size
+codegen-units = 1   # Reduce number of codegen units to increase optimizations
+panic = 'abort'     # Abort on panic
