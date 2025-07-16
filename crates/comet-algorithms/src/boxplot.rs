@@ -11,28 +11,6 @@ pub struct BoxplotStats {
     pub whisker_high: f64,
 }
 
-/// Computes the value at a rational index into an array by performing linear
-/// interpolation. If the index is an integer, the exact value at the index is
-/// returned.
-fn interpolate(values: &[f64], index: f64) -> f64 {
-    assert!(values.len() > 0);
-    if index < 0. {
-        values[0]
-    } else if index >= values.len() as f64 - 1. {
-        *values.last().unwrap()
-    } else {
-        let lower = index.floor() as usize;
-        let upper = lower + 1;
-        let t = index - (lower as f64);
-
-        values[lower] * (1. - t) + values[upper] * t
-    }
-}
-
-fn percentile(values: &[f64], q: f64) -> f64 {
-    interpolate(values, q / 100. * (values.len() as f64 - 1.))
-}
-
 pub fn boxplot(values: &[f64], whiskers: f64) -> BoxplotStats {
     let mut sorted_values = values.to_vec();
     sorted_values.sort_by(f64::total_cmp);
@@ -56,20 +34,42 @@ pub fn boxplot(values: &[f64], whiskers: f64) -> BoxplotStats {
         .max(q3);
 
     BoxplotStats {
-        mean: mean,
-        median: median,
-        q1: q1,
-        q3: q3,
+        mean,
+        median,
+        q1,
+        q3,
         min: sorted_values[0],
-        max: sorted_values.last().unwrap().clone(),
-        whisker_low: whisker_low,
-        whisker_high: whisker_high,
+        max: *sorted_values.last().unwrap(),
+        whisker_low,
+        whisker_high,
         outliers: values
             .iter()
             .filter(|&&x| x < whisker_low || x > whisker_high)
             .cloned()
             .collect(),
     }
+}
+
+/// Computes the value at a rational index into an array by performing linear
+/// interpolation. If the index is an integer, the exact value at the index is
+/// returned.
+fn interpolate(values: &[f64], index: f64) -> f64 {
+    assert!(!values.is_empty());
+    if index < 0. {
+        values[0]
+    } else if index >= values.len() as f64 - 1. {
+        *values.last().unwrap()
+    } else {
+        let lower = index.floor() as usize;
+        let upper = lower + 1;
+        let t = index - (lower as f64);
+
+        values[lower] * (1. - t) + values[upper] * t
+    }
+}
+
+fn percentile(values: &[f64], q: f64) -> f64 {
+    interpolate(values, q / 100. * (values.len() as f64 - 1.))
 }
 
 #[cfg(test)]

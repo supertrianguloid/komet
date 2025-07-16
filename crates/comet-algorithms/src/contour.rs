@@ -1,8 +1,8 @@
-fn min(data: &[f64]) -> f64 {
-    data.iter().fold(f64::INFINITY, |a, &b| a.min(b))
+fn min(values: &[f64]) -> f64 {
+    values.iter().fold(f64::INFINITY, |a, &b| a.min(b))
 }
-fn max(data: &[f64]) -> f64 {
-    data.iter().fold(f64::NEG_INFINITY, |a, &b| a.max(b))
+fn max(values: &[f64]) -> f64 {
+    values.iter().fold(f64::NEG_INFINITY, |a, &b| a.max(b))
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -38,7 +38,7 @@ impl Sub for Point {
 
 impl Point {
     fn new(x: f64, y: f64, z: f64) -> Point {
-        Point { x: x, y: y, z: z }
+        Point { x, y, z }
     }
 }
 
@@ -51,13 +51,13 @@ fn intersect_z_plane(p1: &Point, p2: &Point, z: f64) -> Option<Point> {
         None
     } else {
         let ratio = (z - p1.z) / diff.z;
-        if ratio < 0.0 || ratio > 1.0 {
+        if !(0.0..=1.0).contains(&ratio) {
             None
         } else {
             Some(Point {
                 x: p1.x + ratio * diff.x,
                 y: p1.y + ratio * diff.y,
-                z: z,
+                z,
             })
         }
     }
@@ -160,35 +160,20 @@ fn compute_block_intersection(
 
 fn group_segments(mut segments: Vec<(Point, Point)>) -> Vec<Vec<Point>> {
     let mut cycles = Vec::<Vec<Point>>::new();
-    while !segments.is_empty() {
-        let segment = segments.pop().unwrap();
+    while let Some(segment) = segments.pop() {
         let mut cycle = vec![segment.0, segment.1];
         let mut p2 = segment.1;
 
-        loop {
-            match segments.iter().position(|seg| seg.0 == p2) {
-                Some(pos) => {
-                    p2 = segments.remove(pos).1;
-                    cycle.push(p2);
-                }
-                None => {
-                    break;
-                }
-            }
+        while let Some(pos) = segments.iter().position(|seg| seg.0 == p2) {
+            p2 = segments.remove(pos).1;
+            cycle.push(p2);
         }
         cycle.reverse();
         let mut p1 = segment.0;
 
-        loop {
-            match segments.iter().position(|seg| seg.1 == p1) {
-                Some(pos) => {
-                    p1 = segments.remove(pos).0;
-                    cycle.push(p1);
-                }
-                None => {
-                    break;
-                }
-            }
+        while let Some(pos) = segments.iter().position(|seg| seg.1 == p1) {
+            p1 = segments.remove(pos).0;
+            cycle.push(p1);
         }
         cycles.push(cycle);
     }

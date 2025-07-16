@@ -1,16 +1,14 @@
 use ciborium_io::Write as _;
 use ciborium_ll::{Decoder, Encoder, Header};
-use comet_algorithms;
 use rustfft::{FftDirection, FftPlanner};
 use wasm_minimal_protocol::*;
-use String;
 initiate_protocol!();
 
 mod read;
 
 #[wasm_func]
 pub fn contour(input: &[u8]) -> Result<Vec<u8>, String> {
-    let mut decoder = Decoder::from(&input[..]);
+    let mut decoder = Decoder::from(input);
 
     match decoder.pull().unwrap() {
         Header::Array(Some(len)) => {
@@ -62,16 +60,15 @@ pub fn contour(input: &[u8]) -> Result<Vec<u8>, String> {
             }
 
             encoder.flush().unwrap();
-            return Ok(output);
-            // return Ok(b"Hello from wasm!!!".to_vec())
+            Ok(output)
         }
-        _ => return Err(String::from("Expected an array of inputs")),
-    };
+        _ => Err(String::from("Expected an array of inputs")),
+    }
 }
 
 #[wasm_func]
 pub fn histogram(input: &[u8]) -> Result<Vec<u8>, String> {
-    let mut decoder = Decoder::from(&input[..]);
+    let mut decoder = Decoder::from(input);
 
     match decoder.pull().unwrap() {
         Header::Array(Some(len)) => {
@@ -79,7 +76,7 @@ pub fn histogram(input: &[u8]) -> Result<Vec<u8>, String> {
                 return Err(String::from("Expected array of 2 elements, got more"));
             }
 
-            let data = match decoder.pull().unwrap() {
+            let values = match decoder.pull().unwrap() {
                 Header::Array(Some(len)) => read::read_float_array(&mut decoder, len),
                 _ => return Err(String::from("Bad input")),
             };
@@ -87,8 +84,8 @@ pub fn histogram(input: &[u8]) -> Result<Vec<u8>, String> {
             let edges = match decoder.pull().unwrap() {
                 Header::Array(Some(len)) => read::read_float_array(&mut decoder, len),
                 Header::Positive(num_bins) => {
-                    let min = data.iter().fold(f64::INFINITY, |a, &b| a.min(b));
-                    let max = data.iter().fold(f64::NEG_INFINITY, |a, &b| a.max(b));
+                    let min = values.iter().fold(f64::INFINITY, |a, &b| a.min(b));
+                    let max = values.iter().fold(f64::NEG_INFINITY, |a, &b| a.max(b));
 
                     let step = (max - min) / (num_bins as f64);
                     (0..num_bins + 1).map(|x| min + (x as f64) * step).collect()
@@ -96,7 +93,7 @@ pub fn histogram(input: &[u8]) -> Result<Vec<u8>, String> {
                 _ => return Err(String::from("Bad input")),
             };
 
-            let counts = comet_algorithms::histogram(&data, &edges);
+            let counts = comet_algorithms::histogram(&values, &edges);
 
             let mut output = Vec::<u8>::new();
             let mut encoder = Encoder::from(&mut output);
@@ -115,15 +112,15 @@ pub fn histogram(input: &[u8]) -> Result<Vec<u8>, String> {
                 encoder.push(Header::Float(edge)).unwrap();
             }
             encoder.flush().unwrap();
-            return Ok(output);
+            Ok(output)
         }
-        _ => return Err(String::from("Expected an array of inputs")),
-    };
+        _ => Err(String::from("Expected an array of inputs")),
+    }
 }
 
 #[wasm_func]
 pub fn boxplot(input: &[u8]) -> Result<Vec<u8>, String> {
-    let mut decoder = Decoder::from(&input[..]);
+    let mut decoder = Decoder::from(input);
 
     match decoder.pull().unwrap() {
         Header::Array(Some(len)) => {
@@ -131,7 +128,7 @@ pub fn boxplot(input: &[u8]) -> Result<Vec<u8>, String> {
                 return Err(String::from("Expected array of 2 elements, got more"));
             }
 
-            let data = match decoder.pull().unwrap() {
+            let values = match decoder.pull().unwrap() {
                 Header::Array(Some(len)) => read::read_float_array(&mut decoder, len),
                 _ => return Err(String::from("Bad input")),
             };
@@ -141,7 +138,7 @@ pub fn boxplot(input: &[u8]) -> Result<Vec<u8>, String> {
                 _ => return Err(String::from("Bad input")),
             };
 
-            let boxplot_stats = comet_algorithms::boxplot(&data, whisker_pos);
+            let boxplot_stats = comet_algorithms::boxplot(&values, whisker_pos);
 
             let mut output = Vec::<u8>::new();
             let mut encoder = Encoder::from(&mut output);
@@ -185,10 +182,10 @@ pub fn boxplot(input: &[u8]) -> Result<Vec<u8>, String> {
             }
 
             encoder.flush().unwrap();
-            return Ok(output);
+            Ok(output)
         }
-        _ => return Err(String::from("Expected an array of inputs")),
-    };
+        _ => Err(String::from("Expected an array of inputs")),
+    }
 }
 
 #[wasm_func]
@@ -218,35 +215,35 @@ pub fn boxplot_alt(input: &[u8]) -> Result<Vec<u8>, String> {
         .map(|value| f64::to_be_bytes(*value))
         .collect();
 
-    return Ok(p[..].concat());
+    Ok(p[..].concat())
 }
 
 fn fft_impl(input: &[u8], direction: FftDirection) -> Result<Vec<u8>, String> {
-    let mut decoder = Decoder::from(&input[..]);
+    let mut decoder = Decoder::from(input);
 
-    let mut data = match decoder.pull().unwrap() {
+    let mut values = match decoder.pull().unwrap() {
         Header::Array(Some(len)) => read::read_complex_array(&mut decoder, len).unwrap(),
         _ => return Err(String::from("Expected an array of inputs")),
     };
 
     let mut planner = FftPlanner::<f64>::new();
-    let fft = planner.plan_fft(data.len(), direction);
-    fft.process(&mut data);
+    let fft = planner.plan_fft(values.len(), direction);
+    fft.process(&mut values);
     if direction == FftDirection::Inverse {
-        let normalization = 1. / (data.len() as f64);
-        for elem in data.iter_mut() {
-            *elem *= normalization;
+        let normalization = 1. / (values.len() as f64);
+        for value in values.iter_mut() {
+            *value *= normalization;
         }
     }
 
     let mut output = Vec::<u8>::new();
     let mut encoder = Encoder::from(&mut output);
 
-    encoder.push(Header::Array(Some(data.len()))).unwrap();
-    for elem in data {
+    encoder.push(Header::Array(Some(values.len()))).unwrap();
+    for value in values {
         encoder.push(Header::Array(Some(2))).unwrap();
-        encoder.push(Header::Float(elem.re)).unwrap();
-        encoder.push(Header::Float(elem.im)).unwrap();
+        encoder.push(Header::Float(value.re)).unwrap();
+        encoder.push(Header::Float(value.im)).unwrap();
     }
 
     Ok(output)
@@ -254,10 +251,10 @@ fn fft_impl(input: &[u8], direction: FftDirection) -> Result<Vec<u8>, String> {
 
 #[wasm_func]
 fn fft(input: &[u8]) -> Result<Vec<u8>, String> {
-    fft_impl(&input, FftDirection::Forward)
+    fft_impl(input, FftDirection::Forward)
 }
 
 #[wasm_func]
 fn ifft(input: &[u8]) -> Result<Vec<u8>, String> {
-    fft_impl(&input, FftDirection::Inverse)
+    fft_impl(input, FftDirection::Inverse)
 }

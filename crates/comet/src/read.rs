@@ -2,25 +2,24 @@ use ciborium_ll::{Decoder, Header};
 use rustfft::num_complex::Complex64;
 
 pub fn read_float_array<R: std::io::Read>(decoder: &mut Decoder<R>, len: usize) -> Vec<f64> {
-    let mut data = Vec::<f64>::new();
-    data.reserve(len);
+    let mut values = Vec::<f64>::with_capacity(len);
     for _ in 0..len {
         match decoder.pull().unwrap() {
-            Header::Float(x) => data.push(x),
+            Header::Float(x) => values.push(x),
             _ => panic!("oof"),
         }
     }
-    data
+    values
 }
 
 pub fn read_complex_array<R: std::io::Read>(
     decoder: &mut Decoder<R>,
     len: usize,
 ) -> Result<Vec<Complex64>, String> {
-    let mut data = vec![Complex64 { re: 0.0, im: 0.0 }; len];
+    let mut values = vec![Complex64 { re: 0.0, im: 0.0 }; len];
 
-    for i in 0..len {
-        data[i] = match decoder.pull().unwrap() {
+    for value in values.iter_mut() {
+        *value = match decoder.pull().unwrap() {
             Header::Array(Some(2)) => {
                 let re = match decoder.pull().unwrap() {
                     Header::Float(x) => x,
@@ -31,10 +30,10 @@ pub fn read_complex_array<R: std::io::Read>(
                     Header::Float(x) => x,
                     _ => return Err(String::from("Bad input")),
                 };
-                Complex64 { re: re, im: im }
+                Complex64 { re, im }
             }
             _ => return Err(String::from("Bad input")),
         };
     }
-    Ok(data)
+    Ok(values)
 }
