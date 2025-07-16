@@ -33,9 +33,13 @@ jobs:
     - name: Build WASM plugin
       run: cargo build --release --target wasm32-unknown-unknown
 
-    - name: Copy WASM plugin
-      run: cp -f ./target/wasm32-unknown-unknown/release/comet.wasm ./src/comet.wasm
-      
+    - name: Upload WASM artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: comet.wasm
+        path: ./target/wasm32-unknown-unknown/release/comet.wasm
+
+
   test-typst:
     name: Tests (Typst)
     needs: build
@@ -44,6 +48,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Download WASM artifact        
+        uses: actions/download-artifact@v4
+        with:
+          name: comet.wasm
+          path: ./src/comet.wasm
 
       - name: Install tytanic (binary)
         uses: taiki-e/install-action@v2
