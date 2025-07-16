@@ -1,6 +1,11 @@
 ![comet](https://github.com/user-attachments/assets/fb835102-9e98-47d0-8e89-ef7da156c5b7)
 ---
 
+<!-- [![Typst Package](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FMc-Zen%2Fcomet%2Fv0.4.0%2Ftypst.toml&query=%24.package.version&prefix=v&logo=typst&label=package&color=239DAD)](https://typst.app/universe/package/comet) -->
+[![ci](https://github.com/Mc-Zen/comet/actions/workflows/ci.yml/badge.svg)](https://github.com/Mc-Zen/comet/actions/workflows/ci.yml)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/Mc-Zen/comet/blob/main/LICENSE)
+
+
 _High-performance computations for Typst_
 
 
@@ -33,7 +38,6 @@ cargo build --release --target wasm32-unknown-unknown
 ## Documentation
 
 
----
 ### Histogram
 ```typ
 #comet.histogram(
