@@ -19,10 +19,15 @@ Contributions are welcome as long as they keep the binary size low (which also m
 
 ## Repository structure
 
-This repository contains two Rust crates
+This repository contains two Rust crates in the `crates/` directory
 - `comet-algorithms`: A library that contains the source code for the actual algorithms (e.g., `contour`). 
 - `comet`: Compiles to a WASM plugin for Typst. 
-and a Typst package `comet`. 
+
+and a Typst package `comet` in `src/`. You can build the plugin via
+```
+rustup target add wasm32-unknown-unknown
+cargo build --release --target wasm32-unknown-unknown
+```
 
 
 ## Documentation
