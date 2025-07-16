@@ -53,7 +53,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: comet.wasm
-          path: ./src/comet.wasm
+          path: ./src
 
       - name: Install tytanic (binary)
         uses: taiki-e/install-action@v2
