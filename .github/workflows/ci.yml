@@ -16,9 +16,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: Swatinem/rust-cache@v2
 
     - name: Run tests
       run: cargo test --package comet-algorithms
+      
       
   build:
     name: Build WASM plugin
@@ -26,6 +28,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: Swatinem/rust-cache@v2
 
     - name: Install WASM target
       run: rustup target add wasm32-unknown-unknown
@@ -38,6 +41,16 @@ jobs:
       with:
         name: comet.wasm
         path: ./target/wasm32-unknown-unknown/release/comet.wasm
+
+        
+  checks:
+    name: Check clippy and formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo clippy --workspace --all-targets
+      - run: cargo fmt --check --all
 
 
   test-typst:
