@@ -29,7 +29,7 @@
   y, 
 
   /// Specifies the z coordinates (heights). 
-  /// -> array
+  /// -> array | function
   z, 
 
   /// Specifies the levels to compute contours for. 
@@ -51,5 +51,5 @@
     z.flatten().map(float),
     levels.map(float)
   ))
-  cbor(comet-plugin.contour(data))
+  cbor(comet-plugin.contour(data)).contours
 }

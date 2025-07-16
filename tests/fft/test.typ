@@ -10,10 +10,10 @@
   ((5, -4), (-3, 0), (3, 26), (-1, -14)),
 )
 
-#let test-inverse(data) = {
+#let test-inverse(values) = {
   assert.eq(
-    ifft(fft(data)),
-    data,
+    ifft(fft(values)),
+    values,
   )
 }
 

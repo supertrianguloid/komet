@@ -1,9 +1,9 @@
 #import "plugin.typ": comet-plugin
 
 #let fft-impl(
-  data, direction: "forward"
+  values, direction: "forward"
 ) = {
-  data = data.map(x => {
+  values = values.map(x => {
     if type(x) in (int, float) { return (float(x), 0.) }
     assert(
       type(x) == array and x.len() == 2,
@@ -18,7 +18,7 @@
     comet-plugin.ifft 
   }
 
-  cbor(fft(cbor.encode(data)))
+  cbor(fft(cbor.encode(values)))
 }
 
 
@@ -30,9 +30,9 @@
   /// An array of real (`float`) or complex (real/imaginary pairs of `float`) 
   /// values. 
   /// -> array
-  data
+  values
 
-) = fft-impl(data, direction: "forward")
+) = fft-impl(values, direction: "forward")
 
 
 /// Computes the inverse discrete Fourier transform (DFT). 
@@ -43,6 +43,6 @@
   /// An array of real (`float`) or complex (real/imaginary pairs of `float`) 
   /// values. 
   /// -> array
-  data
+  values
 
-) = fft-impl(data, direction: "inverse")
+) = fft-impl(values, direction: "inverse")
