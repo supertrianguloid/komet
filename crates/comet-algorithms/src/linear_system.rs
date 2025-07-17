@@ -88,11 +88,6 @@ mod tests {
         let b = &[1.0, 42.0, 17.0, -5.0, 0.1];
 
         let x = thomas_algorithm(a, b);
-        assert!(<[f64]>::relative_eq(
-            &x,
-            b,
-            f64::EPSILON,
-            f64::EPSILON
-        ));
+        assert!(<[f64]>::relative_eq(&x, b, f64::EPSILON, f64::EPSILON));
     }
 }
