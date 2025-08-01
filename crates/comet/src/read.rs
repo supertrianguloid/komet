@@ -9,7 +9,7 @@ pub fn read_float_array<R: std::io::Read>(
     for _ in 0..len {
         match decoder.pull().unwrap() {
             Header::Float(x) => values.push(x),
-            header => return Err(format!("array element {:?} is not a float", header)),
+            _ => return Err(String::from("array element is not a float")),
         }
     }
     Ok(values)
@@ -26,7 +26,7 @@ pub fn read_float_array_2d<R: std::io::Read>(
             Header::Array(Some(inner_len)) => {
                 values.push(read_float_array(decoder, inner_len)?);
             }
-            header => return Err(format!("array element {:?} is not an array", header)),
+            _ => return Err(String::from("array element is not an array")),
         }
     }
 

@@ -266,13 +266,13 @@ pub fn thomas_algorithm(a: &[u8], b: &[u8]) -> Result<Vec<u8>, String> {
 
     let a = match decoder_a.pull().unwrap() {
         Header::Array(Some(len)) => read::read_float_array_2d(&mut decoder_a, len)?,
-        _ => return Err(String::from("input is not an array".to_string())),
+        _ => return Err("input is not an array".to_string()),
     };
     let a = a.iter().map(|r| r.as_slice()).collect::<Vec<&[f64]>>();
 
     let b = match decoder_b.pull().unwrap() {
         Header::Array(Some(len)) => read::read_float_array(&mut decoder_b, len)?,
-        _ => return Err(String::from("input is not an array".to_string())),
+        _ => return Err("input is not an array".to_string()),
     };
 
     let x = comet_algorithms::thomas_algorithm(&a, &b);

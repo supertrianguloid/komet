@@ -5,7 +5,9 @@
 /// See https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm
 /// for more information.
 ///
-/// Returns the solutions $arrow(x) in RR^n$ of the system of linear equqations.
+/// Panics if there's a mismatch in the matrix or vector dimensions.
+///
+/// Returns the solutions $arrow(x) in RR^n$ of the system of linear equations.
 ///
 /// -> array
 #let thomas-algorithm(
@@ -19,6 +21,13 @@
   /// -> array
   b,
 ) = {
+  let n = A.len()
+
+  for row in A {
+    assert.eq(row.len(), n, message: "matrix is not square")
+  }
+  assert.eq(b.len(), n, message: "vector dimension does not match matrix dimension")
+
   let A = cbor.encode(A.map(row => row.map(float)))
   let b = cbor.encode(b.map(float))
 
