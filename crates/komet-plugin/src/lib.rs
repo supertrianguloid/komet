@@ -36,7 +36,7 @@ pub fn contour(input: &[u8]) -> Result<Vec<u8>, String> {
                 _ => return Err(String::from("Bad input")),
             };
 
-            let contours = comet_algorithms::contour(&x, &y, &z, &levels);
+            let contours = komet::contour(&x, &y, &z, &levels);
 
             let mut output = Vec::<u8>::new();
             let mut encoder = Encoder::from(&mut output);
@@ -93,7 +93,7 @@ pub fn histogram(input: &[u8]) -> Result<Vec<u8>, String> {
                 _ => return Err(String::from("Bad input")),
             };
 
-            let counts = comet_algorithms::histogram(&values, &edges);
+            let counts = komet::histogram(&values, &edges);
 
             let mut output = Vec::<u8>::new();
             let mut encoder = Encoder::from(&mut output);
@@ -138,7 +138,7 @@ pub fn boxplot(input: &[u8]) -> Result<Vec<u8>, String> {
                 _ => return Err(String::from("Bad input")),
             };
 
-            let boxplot_stats = comet_algorithms::boxplot(&values, whisker_pos);
+            let boxplot_stats = komet::boxplot(&values, whisker_pos);
 
             let mut output = Vec::<u8>::new();
             let mut encoder = Encoder::from(&mut output);
@@ -197,7 +197,7 @@ pub fn boxplot_alt(input: &[u8]) -> Result<Vec<u8>, String> {
 
     let whisker_pos = values[0];
 
-    let boxplot_stats = comet_algorithms::boxplot(&values[1..], whisker_pos);
+    let boxplot_stats = komet::boxplot(&values[1..], whisker_pos);
 
     let mut output_values: Vec<f64> = vec![
         boxplot_stats.mean,
@@ -275,7 +275,7 @@ pub fn thomas_algorithm(a: &[u8], b: &[u8]) -> Result<Vec<u8>, String> {
         _ => return Err("input is not an array".to_string()),
     };
 
-    let x = comet_algorithms::thomas_algorithm(&a, &b);
+    let x = komet::thomas_algorithm(&a, &b);
 
     let mut output = Vec::new();
     let mut encoder = Encoder::from(&mut output);

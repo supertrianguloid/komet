@@ -1,4 +1,4 @@
-#import "plugin.typ": comet-plugin
+#import "plugin.typ": komet-plugin
 
 
 /// Computes a histogram by counting values that fall into a set of intervals,
@@ -30,6 +30,6 @@
     bins,
   ))
 
-  cbor(comet-plugin.histogram(input))
+  cbor(komet-plugin.histogram(input))
 }
 

@@ -1,4 +1,4 @@
-#import "plugin.typ": comet-plugin
+#import "plugin.typ": komet-plugin
 
 
 /// Computes the statistics needed to generate a box plot, including
@@ -33,12 +33,12 @@
   //   whisker_low,
   //   whisker_high,
   //   ..outliers,
-  // ) = array(comet-plugin.boxplot(input)).chunks(8).map(bytes).map(float.from-bytes.with(endian: "big"))
+  // ) = array(komet-plugin.boxplot(input)).chunks(8).map(bytes).map(float.from-bytes.with(endian: "big"))
 
   let input = cbor.encode((
     values.map(float),
     float(whisker-pos)
   ))
 
-  cbor(comet-plugin.boxplot(input))
+  cbor(komet-plugin.boxplot(input))
 }

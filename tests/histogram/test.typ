@@ -1,4 +1,4 @@
-#import "/src/comet.typ": histogram
+#import "/src/komet.typ": histogram
 
 #assert.eq(
   histogram((1, 3, 5, 7), bins: (0, 2, 8)),

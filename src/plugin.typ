@@ -1,1 +1,1 @@
-#let comet-plugin = plugin("comet.wasm")
+#let komet-plugin = plugin("komet.wasm")

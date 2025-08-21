@@ -1,4 +1,4 @@
-#import "plugin.typ": comet-plugin
+#import "plugin.typ": komet-plugin
 
 #let fft-impl(
   values, direction: "forward"
@@ -13,9 +13,9 @@
   })
 
   let fft = if direction == "forward" { 
-    comet-plugin.fft 
+    komet-plugin.fft 
   } else { 
-    comet-plugin.ifft 
+    komet-plugin.ifft 
   }
 
   cbor(fft(cbor.encode(values)))

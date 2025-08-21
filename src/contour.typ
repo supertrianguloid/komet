@@ -1,4 +1,4 @@
-#import "plugin.typ": comet-plugin
+#import "plugin.typ": komet-plugin
 
 
 
@@ -51,5 +51,5 @@
     z.flatten().map(float),
     levels.map(float)
   ))
-  cbor(comet-plugin.contour(data)).contours
+  cbor(komet-plugin.contour(data)).contours
 }

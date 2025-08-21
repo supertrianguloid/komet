@@ -1,4 +1,4 @@
-#import "/src/comet.typ": thomas-algorithm
+#import "/src/komet.typ": thomas-algorithm
 #import "/src/assertations.typ": approx
 
 #let A = ((2,),)

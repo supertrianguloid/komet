@@ -1,4 +1,4 @@
-#import "plugin.typ": comet-plugin
+#import "plugin.typ": komet-plugin
 
 /// Solve a system of linear equations $A dot arrow(x) = arrow(b)$
 /// where $A$ is a tridiagonal matrix.
@@ -31,6 +31,6 @@
   let A = cbor.encode(A.map(row => row.map(float)))
   let b = cbor.encode(b.map(float))
 
-  cbor(comet-plugin.thomas_algorithm(A, b))
+  cbor(komet-plugin.thomas_algorithm(A, b))
 }
 

@@ -19,7 +19,7 @@ jobs:
     - uses: Swatinem/rust-cache@v2
 
     - name: Run tests
-      run: cargo test --package comet-algorithms
+      run: cargo test --package komet
       
       
   build:
@@ -39,8 +39,8 @@ jobs:
     - name: Upload WASM artifact
       uses: actions/upload-artifact@v4
       with:
-        name: comet.wasm
-        path: ./target/wasm32-unknown-unknown/release/comet.wasm
+        name: komet.wasm
+        path: ./target/wasm32-unknown-unknown/release/komet.wasm
 
         
   checks:
@@ -65,7 +65,7 @@ jobs:
       - name: Download WASM artifact        
         uses: actions/download-artifact@v4
         with:
-          name: comet.wasm
+          name: komet.wasm
           path: ./src
 
       - name: Install tytanic (binary)

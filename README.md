@@ -1,10 +1,10 @@
-![comet2](https://github.com/user-attachments/assets/a45f2579-8e91-43ab-9ca0-e79e46ddb121)
+![komet2](https://github.com/user-attachments/assets/a45f2579-8e91-43ab-9ca0-e79e46ddb121)
 
 ---
 
-<!-- [![Typst Package](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FMc-Zen%2Fcomet%2Fv0.4.0%2Ftypst.toml&query=%24.package.version&prefix=v&logo=typst&label=package&color=239DAD)](https://typst.app/universe/package/comet) -->
-[![ci](https://github.com/Mc-Zen/comet/actions/workflows/ci.yml/badge.svg)](https://github.com/Mc-Zen/comet/actions/workflows/ci.yml)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/Mc-Zen/comet/blob/main/LICENSE)
+<!-- [![Typst Package](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FMc-Zen%2Fkomet%2Fv0.4.0%2Ftypst.toml&query=%24.package.version&prefix=v&logo=typst&label=package&color=239DAD)](https://typst.app/universe/package/komet) -->
+[![ci](https://github.com/Mc-Zen/komet/actions/workflows/ci.yml/badge.svg)](https://github.com/Mc-Zen/komet/actions/workflows/ci.yml)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/Mc-Zen/komet/blob/main/LICENSE)
 
 
 _High-performance computations for Typst_
@@ -15,21 +15,21 @@ In particular, this package supercharges the plotting package [Lilaq](https://li
 
 
 Currently, the following functions are available:
-- [`comet.histogram`](#histogram)
-- [`comet.boxplot`](#boxplot)
-- [`comet.fft`](#fft)
-- [`comet.ifft`](#ifft)
-- [`comet.contour`](#contour)
+- [`komet.histogram`](#histogram)
+- [`komet.boxplot`](#boxplot)
+- [`komet.fft`](#fft)
+- [`komet.ifft`](#ifft)
+- [`komet.contour`](#contour)
 
 Contributions are welcome as long as they keep the binary size low (which also means they ideally add no crates as dependencies). 
 
 ## Repository structure
 
 This repository contains two Rust crates in the `crates/` directory
-- `comet-algorithms`: A library that contains the source code for the actual algorithms (e.g., `contour`). 
-- `comet`: Compiles to a WASM plugin for Typst. 
+- `komet`: A library that contains the source code for the actual algorithms (e.g., `contour`). 
+- `komet-plugin`: Compiles to a WASM plugin for Typst. 
 
-and a Typst package `comet` in `src/`. You can build the plugin via
+and a Typst package `komet` in `src/`. You can build the plugin via
 ```
 rustup target add wasm32-unknown-unknown
 cargo build --release --target wasm32-unknown-unknown
@@ -41,7 +41,7 @@ cargo build --release --target wasm32-unknown-unknown
 
 ### Histogram
 ```typ
-#comet.histogram(
+#komet.histogram(
     values: array,
     bins: int | array
 )
@@ -54,7 +54,7 @@ Computes a histogram of the given array. Elements need to be of type `int` or `f
 ---
 ### Boxplot
 ```typ
-#comet.boxplot(
+#komet.boxplot(
     values: array,
     whisker-pos: float = 1.5
 ) -> dictionary
@@ -74,7 +74,7 @@ All of these values are returned together in form of a dictionary.
 ---
 ### FFT
 ```typ
-#comet.fft(
+#komet.fft(
     values: array
 )
 ```
@@ -83,7 +83,7 @@ Computes the Fourier transform of an array of real (`float`) or complex (real/im
 ---
 ### IFFT
 ```typ
-#comet.ifft(
+#komet.ifft(
     values: array
 )
 ```
@@ -92,7 +92,7 @@ Computes the inverse Fourier transform of an array of real (`float`) or complex 
 ---
 ### Contour
 ```typ
-#comet.contour(
+#komet.contour(
     x: array,
     y: array,
     z: array,

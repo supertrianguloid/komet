@@ -1,4 +1,4 @@
-#import "/src/comet.typ": fft, ifft
+#import "/src/komet.typ": fft, ifft
 
 #assert.eq(
   fft((1, 2, 3, 4)),

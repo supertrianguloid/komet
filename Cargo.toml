@@ -1,7 +1,7 @@
 [workspace]
 members = [
-    "crates/comet",
-    "crates/comet-algorithms"
+    "crates/komet",
+    "crates/komet-plugin"
 ]
 resolver = "2"
 

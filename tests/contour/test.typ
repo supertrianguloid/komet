@@ -1,4 +1,4 @@
-#import "/src/comet.typ": contour
+#import "/src/komet.typ": contour
 
 #assert.eq(
   contour(

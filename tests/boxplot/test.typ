@@ -1,4 +1,4 @@
-#import "/src/comet.typ": boxplot
+#import "/src/komet.typ": boxplot
 
 #assert.eq(boxplot((1, 2, 3, 4, -2, 100)), (
   mean: 18.0,

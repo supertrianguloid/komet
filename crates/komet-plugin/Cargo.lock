@@ -42,19 +42,19 @@ dependencies = [
 ]
 
 [[package]]
-name = "comet"
+name = "komet-plugin"
 version = "0.1.0"
 dependencies = [
  "ciborium",
  "ciborium-io",
  "ciborium-ll",
- "comet-algorithms",
+ "komet",
  "rustfft",
  "wasm-minimal-protocol",
 ]
 
 [[package]]
-name = "comet-algorithms"
+name = "komet"
 version = "0.1.0"
 
 [[package]]
