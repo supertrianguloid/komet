@@ -1,4 +1,5 @@
-![comet](https://github.com/user-attachments/assets/fb835102-9e98-47d0-8e89-ef7da156c5b7)
+![comet2](https://github.com/user-attachments/assets/a45f2579-8e91-43ab-9ca0-e79e46ddb121)
+
 ---
 
 <!-- [![Typst Package](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FMc-Zen%2Fcomet%2Fv0.4.0%2Ftypst.toml&query=%24.package.version&prefix=v&logo=typst&label=package&color=239DAD)](https://typst.app/universe/package/comet) -->
