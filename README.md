@@ -20,6 +20,7 @@ Currently, the following functions are available:
 - [`komet.fft`](#fft)
 - [`komet.ifft`](#ifft)
 - [`komet.contour`](#contour)
+- [`komet.thomas-algorithm`](#thomas-algorithm)
 
 Contributions are welcome as long as they keep the binary size low (which also means they ideally add no crates as dependencies). 
 
@@ -117,3 +118,18 @@ The return value is an array with
    than one disjoint curve per level), 
 3. where each contour line comprises a set of vertices `(x, y)` making up the curve. 
 
+
+---
+### Thomas Algorithm
+```typ
+#komet.thomas-algorithm(
+    A: array,
+    b: array
+)
+```
+Solves a system of linear equations $A\vec{x} = \vec{b}$
+where $A$ is a tridiagonal matrix and returns the solution $\vec{x}$.
+See https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm
+for more information.
+
+The expected format of the matrix is an array of arrays, in row-major order.
