@@ -221,6 +221,18 @@ pub fn boxplot_alt(input: &[u8]) -> Result<Vec<u8>, String> {
 fn fft_impl(input: &[u8], direction: FftDirection) -> Result<Vec<u8>, String> {
     let mut decoder = Decoder::from(input);
 
+    match decoder.pull().unwrap() {
+        Header::Array(Some(len)) => {
+            assert_eq!(len, 2);
+        }
+        _ => return Err(String::from("Expected two elements")),
+    };
+
+    let norm_code = match decoder.pull().unwrap() {
+        Header::Positive(code) => code,
+        _ => return Err(String::from("Bad input")),
+    };
+
     let mut values = match decoder.pull().unwrap() {
         Header::Array(Some(len)) => read::read_complex_array(&mut decoder, len).unwrap(),
         _ => return Err(String::from("Expected an array of inputs")),
@@ -229,8 +241,15 @@ fn fft_impl(input: &[u8], direction: FftDirection) -> Result<Vec<u8>, String> {
     let mut planner = FftPlanner::<f64>::new();
     let fft = planner.plan_fft(values.len(), direction);
     fft.process(&mut values);
-    if direction == FftDirection::Inverse {
+    if (norm_code == 1 && direction == FftDirection::Inverse)
+        || (norm_code == 3 && direction == FftDirection::Forward)
+    {
         let normalization = 1. / (values.len() as f64);
+        for value in values.iter_mut() {
+            *value *= normalization;
+        }
+    } else if norm_code == 2 {
+        let normalization = (1. / (values.len() as f64)).sqrt();
         for value in values.iter_mut() {
             *value *= normalization;
         }

@@ -1,7 +1,7 @@
 #import "plugin.typ": komet-plugin
 
 #let fft-impl(
-  values, direction: "forward"
+  values, direction: "forward", norm: "backward"
 ) = {
   values = values.map(x => {
     if type(x) in (int, float) { return (float(x), 0.) }
@@ -18,7 +18,9 @@
     komet-plugin.ifft 
   }
 
-  cbor(fft(cbor.encode(values)))
+  let norm-code = if norm == "backward" { 1 } else if norm == "ortho" { 2 } else { 3 }
+
+  cbor(fft(cbor.encode((norm-code, values))))
 }
 
 
@@ -30,9 +32,16 @@
   /// An array of real (`float`) or complex (real/imaginary pairs of `float`) 
   /// values. 
   /// -> array
-  values
+  values,
 
-) = fft-impl(values, direction: "forward")
+  /// How to normalize the output. Options are:
+  /// - `"backward"`: the entire normalization of $1/N$ happens at the inverse DFT. 
+  /// - `"forward"`: the entire normalization of $1/N$ happens at the forward DFT. 
+  /// - `"ortho"`: the normalization is split across DFT and its inverse and to both the factor $1/√N$ is applied. 
+  /// -> "backward" | "forward" | "ortho"
+  norm: "backward"
+
+) = fft-impl(values, direction: "forward", norm: norm)
 
 
 /// Computes the inverse discrete Fourier transform (DFT). 
@@ -43,6 +52,13 @@
   /// An array of real (`float`) or complex (real/imaginary pairs of `float`) 
   /// values. 
   /// -> array
-  values
+  values,
 
-) = fft-impl(values, direction: "inverse")
+  /// How to normalize the output. Options are:
+  /// - `"backward"`: the entire normalization of $1/N$ happens at the inverse DFT. 
+  /// - `"forward"`: the entire normalization of $1/N$ happens at the forward DFT. 
+  /// - `"ortho"`: the normalization is split across DFT and its inverse and to both the factor $1/√N$ is applied. 
+  /// -> "backward" | "forward" | "ortho"
+  norm: "backward"
+
+) = fft-impl(values, direction: "inverse", norm: norm)

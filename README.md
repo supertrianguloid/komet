@@ -76,16 +76,24 @@ All of these values are returned together in form of a dictionary.
 ### FFT
 ```typ
 #komet.fft(
-    values: array
+    values: array,
+    norm: "backward"
 )
 ```
 Computes the Fourier transform of an array of real (`float`) or complex (real/imaginary pairs of `float`) values through the FFT algorithm. Returns an array of complex (i.e., real/imaginary `float` pairs) numbers. 
+
+The normalization mode determines how the output is normalized. Options are:
+- `"backward"`: the entire normalization of $1/N$ happens to the inverse DFT. 
+- `"forward"`: the entire normalization of $1/N$ happens to the forward DFT. 
+- `"ortho"`: the normalization is split across DFT and its inverse and to both the factor $1/\sqrt{N}$ is applied. 
+
 
 ---
 ### IFFT
 ```typ
 #komet.ifft(
-    values: array
+    values: array,
+    norm: "backward"
 )
 ```
 Computes the inverse Fourier transform of an array of real (`float`) or complex (real/imaginary pairs of `float`) values. Returns an array of complex (i.e., real/imaginary `float` pairs) numbers. 

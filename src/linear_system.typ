@@ -27,9 +27,9 @@
   let n = A.len()
 
   for row in A {
-    assert.eq(row.len(), n, message: "Matrix is not square")
+    assert.eq(row.len(), n, message: "matrix is not square")
   }
-  assert.eq(b.len(), n, message: "Vector dimension does not match matrix dimension")
+  assert.eq(b.len(), n, message: "vector dimension does not match matrix dimension")
 
   let A = cbor.encode(A.map(row => row.map(float)))
   let b = cbor.encode(b.map(float))
