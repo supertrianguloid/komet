@@ -7,6 +7,6 @@ license = "MIT"
 description = "Selected high-performance computations for Typst."
 compiler = "0.11.0"
 
-repository = "https://github.com/lilaq-project/komet"
+repository = "https://github.com/Mc-Zen/komet"
 keywords = ["algorithm", "plugin", "fft", "histogram", "ifft", "fourier transform", "contour", "boxplot", "mathematic"]
 categories = ["scripting", "utility"]
