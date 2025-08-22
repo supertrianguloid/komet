@@ -4,9 +4,9 @@ version = "0.1.0"
 entrypoint = "src/komet.typ"
 authors = ["Mc-Zen <https://github.com/Mc-Zen>"]
 license = "MIT"
-description = "Faster."
+description = "Selected high-performance computations for Typst."
 compiler = "0.11.0"
 
 repository = "https://github.com/lilaq-project/komet"
-keywords = ["algorithm"]
+keywords = ["algorithm", "plugin", "fft", "histogram", "ifft", "fourier transform", "contour", "boxplot", "mathematic"]
 categories = ["scripting", "utility"]
